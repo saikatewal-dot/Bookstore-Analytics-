@@ -4,9 +4,6 @@ import pyodbc
 import plotly.express as px
 
 
-# --------------------------------------------------
-# PAGE CONFIGURATION
-# --------------------------------------------------
 
 st.set_page_config(
     page_title="Bookstore Analytics",
@@ -15,9 +12,6 @@ st.set_page_config(
 )
 
 
-# --------------------------------------------------
-# DATABASE CONNECTION
-# --------------------------------------------------
 
 Driver = 'ODBC Driver 18 for SQL Server'
 Server = r'sai\SQLEXPRESS'
@@ -34,9 +28,7 @@ connection_string = (
 conn = pyodbc.connect(connection_string)
 
 
-# --------------------------------------------------
-# SQL QUERY
-# --------------------------------------------------
+
 
 query = """
 SELECT 
@@ -74,9 +66,6 @@ df = pd.read_sql(query, conn)
 conn.close()
 
 
-# --------------------------------------------------
-# TITLE
-# --------------------------------------------------
 
 st.title("📚 Bookstore Analytics Dashboard")
 
@@ -85,16 +74,10 @@ st.write(
 )
 
 
-# --------------------------------------------------
-# DATE CONVERSION
-# --------------------------------------------------
+
 
 df["Order_Date"] = pd.to_datetime(df["Order_Date"])
 
-
-# --------------------------------------------------
-# SIDEBAR FILTERS
-# --------------------------------------------------
 
 st.sidebar.header("🔎 Filters")
 
@@ -109,9 +92,6 @@ selected_city = st.sidebar.selectbox(
 )
 
 
-# --------------------------------------------------
-# APPLY FILTERS
-# --------------------------------------------------
 
 filtered_df = df.copy()
 
@@ -126,9 +106,6 @@ if selected_city != "All":
     ]
 
 
-# --------------------------------------------------
-# KPI CALCULATIONS
-# --------------------------------------------------
 
 total_revenue = filtered_df["Total_Amount"].sum()
 
@@ -139,9 +116,6 @@ total_books_sold = filtered_df["Quantity"].sum()
 total_customers = filtered_df["Customer_ID"].nunique()
 
 
-# --------------------------------------------------
-# KPI CARDS
-# --------------------------------------------------
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -166,14 +140,9 @@ col4.metric(
 )
 
 
-# --------------------------------------------------
-# TOP BOOKS + GENRE REVENUE
-# --------------------------------------------------
-
 col1, col2 = st.columns(2)
 
 
-# ---------------- TOP BOOKS ----------------
 
 with col1:
 
@@ -205,7 +174,6 @@ with col1:
     )
 
 
-# ---------------- GENRE REVENUE ----------------
 
 with col2:
 
@@ -236,10 +204,6 @@ with col2:
     )
 
 
-# --------------------------------------------------
-# TOP CUSTOMERS
-# --------------------------------------------------
-
 st.subheader("👥 Top 10 Customers")
 
 top_customers = (
@@ -268,10 +232,6 @@ st.plotly_chart(
 )
 
 
-# --------------------------------------------------
-# SALES OVER TIME
-# --------------------------------------------------
-
 st.subheader("📈 Sales Over Time")
 
 sales_over_time = (
@@ -297,12 +257,6 @@ st.plotly_chart(
     fig,
     use_container_width=True
 )
-
-
-# --------------------------------------------------
-# REVENUE BY CITY
-# --------------------------------------------------
-
 st.subheader("🌍 Revenue by City")
 
 city_revenue = (
